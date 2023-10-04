@@ -31,33 +31,36 @@ export default class JobController {
         const response = await axios.get(
             `${DANS_BASE_URL}/recruitment/positions.json`,
         );
-        const totalData = response.data.length
+        
         const limit = queryParam.limit || 5
         const currPage = queryParam.page
-        let resultData = response.data.slice(currPage * limit - limit, currPage * limit);
+        let filteredData = response.data
 
         if(queryParam.is_fulltime) {
-            resultData = resultData.filter((elmt: JobDto) => {
+            filteredData = filteredData.filter((elmt: JobDto) => {
                 return elmt.type == 'Full Time' 
             })
         }
 
         if(queryParam.location) {
-            resultData = resultData.filter((elmt: JobDto) => {
+            filteredData = filteredData.filter((elmt: JobDto) => {
                 return elmt.type == 'Full Time' 
             })
         }
         if(queryParam.location) {
-            resultData = resultData.filter((elmt: JobDto) => {
+            filteredData = filteredData.filter((elmt: JobDto) => {
                 return elmt.location.toLowerCase().indexOf(queryParam.location) != -1
             })
         }
 
         if(queryParam.description) {
-            resultData = resultData.filter((elmt: JobDto) => {
+            filteredData = filteredData.filter((elmt: JobDto) => {
                 return elmt.description.toLowerCase().indexOf(queryParam.description) != -1
             })
         }
+
+        const resultData = filteredData.slice(currPage * limit - limit, currPage * limit);
+        const totalData = resultData.length
 
         return ResponseDto.success({
             total_data: totalData,
