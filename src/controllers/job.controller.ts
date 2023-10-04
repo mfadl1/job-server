@@ -60,7 +60,7 @@ export default class JobController {
         }
 
         const resultData = filteredData.slice(currPage * limit - limit, currPage * limit);
-        const totalData = resultData.length
+        const totalData = filteredData.length
 
         return ResponseDto.success({
             total_data: totalData,
