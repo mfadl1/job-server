@@ -44,11 +44,6 @@ export default class JobController {
 
         if(queryParam.location) {
             filteredData = filteredData.filter((elmt: JobDto) => {
-                return elmt.type == 'Full Time' 
-            })
-        }
-        if(queryParam.location) {
-            filteredData = filteredData.filter((elmt: JobDto) => {
                 return elmt.location.toLowerCase().indexOf(queryParam.location) != -1
             })
         }
