@@ -12,6 +12,7 @@ import { AuthQuery, API as AuthenticatorAPI } from '@dans/user-service';
 import axios from 'axios';
 import { DANS_BASE_URL } from '@/config';
 import { getJobQuery } from '@/dtos/query_param.dto';
+import { JobResponse } from '@/dtos/interface';
 
 @JsonController('/job')
 @injectable()
@@ -31,38 +32,49 @@ export default class JobController {
         const response = await axios.get(
             `${DANS_BASE_URL}/recruitment/positions.json`,
         );
-        
-        const limit = queryParam.limit || 5
-        const currPage = queryParam.page
-        let filteredData = response.data
 
-        if(queryParam.is_fulltime) {
+        const limit = queryParam.limit || 5;
+        const currPage = queryParam.page;
+        let filteredData = response.data;
+
+        if (queryParam.is_fulltime) {
             filteredData = filteredData.filter((elmt: JobDto) => {
-                return elmt.type == 'Full Time' 
-            })
+                return elmt.type == 'Full Time';
+            });
         }
 
-        if(queryParam.location) {
+        if (queryParam.location) {
             filteredData = filteredData.filter((elmt: JobDto) => {
-                return elmt.location.toLowerCase().indexOf(queryParam.location) != -1
-            })
+                return (
+                    elmt.location.toLowerCase().indexOf(queryParam.location) !=
+                    -1
+                );
+            });
         }
 
-        if(queryParam.description) {
+        if (queryParam.description) {
             filteredData = filteredData.filter((elmt: JobDto) => {
-                return elmt.description.toLowerCase().indexOf(queryParam.description) != -1
-            })
+                return (
+                    elmt.description
+                        .toLowerCase()
+                        .indexOf(queryParam.description) != -1
+                );
+            });
         }
 
-        const resultData = filteredData.slice(currPage * limit - limit, currPage * limit);
-        const totalData = filteredData.length
+        const resultData = filteredData.slice(
+            currPage * limit - limit,
+            currPage * limit,
+        );
+        const totalData = filteredData.length;
+        const result = resultData.map((val: JobResponse) => new JobDto(val))
 
         return ResponseDto.success({
             total_data: totalData,
             current_page: currPage,
             per_page: limit,
             total_pages: Math.ceil(totalData / limit),
-            data: resultData,
+            data: result,
         });
     }
 

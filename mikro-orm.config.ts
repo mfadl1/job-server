@@ -2,7 +2,6 @@ import { Options, defineConfig } from '@mikro-orm/core';
 import { UserModel } from './mikroorm/entities/user.entity';
 import { RoleModel } from './mikroorm/entities/role.entity';
 
-
 const config: Options = defineConfig({
     entities: [UserModel, RoleModel],
     dbName: 'vokraf',
@@ -15,8 +14,8 @@ const config: Options = defineConfig({
     migrations: {
         path: './mikroorm/migrations',
         disableForeignKeys: false,
-        dropTables: false
-    }
+        dropTables: false,
+    },
 });
 
-export default config
+export default config;

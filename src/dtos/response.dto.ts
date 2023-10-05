@@ -1,5 +1,6 @@
 import { IsString } from 'class-validator';
-import { IHttpResponse } from './interface';
+import { IHttpResponse, JobResponse } from './interface';
+import { calculateDifference } from '@/utils/util';
 
 export default class ResponseDto {
     static success<T>(result: T, message = null): IHttpResponse<T> {
@@ -30,7 +31,7 @@ export class JobDto {
     url: string;
 
     @IsString()
-    created_at: string;
+    last_posted: string;
 
     @IsString()
     company: string;
@@ -52,4 +53,18 @@ export class JobDto {
 
     @IsString()
     company_logo: string;
+
+    constructor(val?: JobResponse){
+        this.id = val?.id;
+        this.type = val?.type;
+        this.url = val?.url;
+        this.last_posted = calculateDifference(new Date(), new Date(val?.created_at));
+        this.company = val?.company;
+        this.company_url = val?.company_url;
+        this.location = val?.location;
+        this.title = val?.title;
+        this.description = val?.description;
+        this.how_to_apply = val?.how_to_apply;
+        this.company_logo = val?.company_logo;
+    }
 }

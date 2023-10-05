@@ -47,7 +47,6 @@ glob(
                 authenticatorMikroOrmDriver.get(AuthenticatorAPI.AuthQuery),
             );
 
-            
             controllers.forEach(controller => {
                 Container.bind(controller).toSelf();
             });
